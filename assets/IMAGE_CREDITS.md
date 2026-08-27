@@ -9,7 +9,7 @@
 | day3-galaxy.jpg | [Commons: Galaxy Macau.jpg](https://commons.wikimedia.org/wiki/File:Galaxy_Macau.jpg) | CC BY-SA |
 | day3-dancingwater.jpg | [Commons: House of Dancing Water Theatre 201301.jpg](https://commons.wikimedia.org/wiki/File:House_of_Dancing_Water_Theatre_201301.jpg) | CC BY-SA |
 | day4-grandlisboa.jpg | [Commons: Casino Lisboa & Grand Lisboa, Macau.JPG](https://commons.wikimedia.org/wiki/File:Casino_Lisboa_%26_Grand_Lisboa,_Macau.JPG) | CC BY-SA |
-| hotel.jpg | [Commons: Broadway Macau Hotel 18-03-2023.jpg](https://commons.wikimedia.org/wiki/File:Broadway_Macau_Hotel_18-03-2023.jpg) | CC BY-SA |
+| hotel.jpg | [Broadway Macau 공식](https://www.broadwaymacau.com.mo/) (BW_hotel_1920x933.jpg) — 브로드웨이 호텔 마카오 공식 전경 | © Broadway Macau |
 | show-cityofdreams.jpg | [Commons: Macau City of Dreams (12469699934).jpg](https://commons.wikimedia.org/wiki/File:Macau_City_of_Dreams_(12469699934).jpg) | CC BY |
 | show-hodw-interior.jpg | [Commons: The House of Dancing Water interior 20180525.jpg](https://commons.wikimedia.org/wiki/File:The_House_of_Dancing_Water_interior_20180525.jpg) | CC BY-SA |
 | dining-urban-kitchen.jpg | [Commons: Urban Kitchen JW Marriott Macau (Oct 2015)](https://commons.wikimedia.org/wiki/File:Macau_%E6%BE%B3%E9%96%80JW%E8%90%AC%E8%B1%AA%E9%85%92%E5%BA%97_JW_Marriott_Hotel_buttet_restaurant_Urban_Kitchen_Oct_2015_DSC.JPG) | CC BY-SA |
