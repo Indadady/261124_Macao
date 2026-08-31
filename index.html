@@ -42,7 +42,38 @@
             background-size: cover; background-position: center; background-attachment: fixed;
         }
         @media (max-width: 768px){ .hero-bg { background-attachment: scroll; } }
-        #map { height: 420px; width: 100%; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 10; }
+        #map { height: 440px; width: 100%; border-radius: 1rem; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 10; }
+        @media (min-width: 1024px) { #map { height: 580px; } }
+        .custom-icon { background: transparent; border: none; }
+        .map-pin-wrap { display: flex; flex-direction: column; align-items: center; }
+        .map-pin-dot {
+            width: 32px; height: 32px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; color: #fff;
+            border: 2px solid rgba(255,255,255,0.95);
+            box-shadow: 0 8px 16px rgba(15,23,42,0.18);
+        }
+        .map-pin-label {
+            margin-top: 3px;
+            background: rgba(255,255,255,0.96);
+            color: #0f172a;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1.2;
+            padding: 2px 6px;
+            border-radius: 6px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+        }
+        .map-bus {
+            font-size: 22px;
+            line-height: 1;
+            filter: drop-shadow(0 4px 8px rgba(15,23,42,0.35));
+            transform-origin: center center;
+            display: inline-block;
+        }
+        .map-wrap { position: relative; z-index: 0; }
 
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
@@ -613,7 +644,7 @@
                 <div class="text-center mb-8">
                     <span class="text-blue-600 font-black tracking-widest text-xs uppercase">Interactive Map (3N 4D)</span>
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">스마트 여행동선</h2>
-                    <p class="text-slate-500 mt-2 text-sm max-w-2xl mx-auto">일자별 버튼을 눌러 이동 경로를 확인하세요. 아래 상세 일정과 함께 보시면 동선 파악이 더 쉽습니다.</p>
+                    <p class="text-slate-500 mt-2 text-sm max-w-2xl mx-auto">차량은 실제 도로를 따라 천천히 그려집니다. 항공만 점선이며, 비행기 기수는 가는 방향을 봅니다.</p>
                 </div>
 
                 <div class="flex gap-2 overflow-x-auto no-scrollbar pb-1 justify-start md:justify-center mb-5" id="map-controls">
@@ -623,8 +654,11 @@
                     <button type="button" onclick="changeMap('day3')" class="map-tab-btn px-4 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-sm font-bold shrink-0">3일차</button>
                     <button type="button" onclick="changeMap('day4')" class="map-tab-btn px-4 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-sm font-bold shrink-0">4일차</button>
                 </div>
-                <div class="border border-slate-200 rounded-2xl p-1 shadow-lg bg-white relative max-w-5xl mx-auto">
-                    <div id="map" class="h-[420px] md:h-[520px] lg:h-[580px] w-full rounded-xl"></div>
+                <div class="map-wrap border border-slate-200 rounded-2xl p-1 shadow-lg bg-white max-w-5xl mx-auto">
+                    <div id="map" class="h-[440px] md:h-[520px] lg:h-[580px] w-full rounded-xl"></div>
+                    <div id="map-status" class="absolute top-4 left-4 z-[400] bg-white/90 backdrop-blur px-3 py-1.5 rounded-xl shadow font-bold text-xs text-slate-700 pointer-events-none">
+                        <i class="fa-solid fa-route text-blue-600 mr-1"></i><span id="map-status-text">실제 도로 동선</span>
+                    </div>
                 </div>
                 <p id="map-hint" class="text-center text-xs text-slate-500 mt-3">📍 1일차: 마카오 도착 후 베네시안 리조트 답사 동선</p>
                 <p class="text-center mt-5">
@@ -1406,8 +1440,12 @@
             }
         }
 
-        // 6. Leaflet Map & Tab Logic
-        let map, layerGroup;
+        // 6. Leaflet Map — OSRM 실제 도로 + 항공 점선 + 기수 방향
+        let map = null;
+        let mapLayers = [];
+        let mapDrawSeq = 0;
+        let activeBus = null;
+        const osrmCache = {};
         const spots = {
             icn: { c: [37.4602, 126.4407], t: "인천국제공항", col: '#004098', i: "✈️" },
             mfm: { c: [22.1496, 113.5916], t: "마카오 국제공항", col: '#004098', i: "✈️" },
@@ -1426,52 +1464,317 @@
             grandlisboa: { c: [22.1893, 113.5430], t: "그랜드 리스보아", col: '#ca8a04', i: "💎" },
             wharf: { c: [22.1957, 113.5527], t: "피셔맨즈 워프", col: '#f59e0b', i: "⚓" }
         };
-
-        const routes = {
-            all: {
-                p: ['icn','mfm','venetian','hotel','stpaul','senado','mgmcotai','taipa','londoner','parisian','galaxy','cod','mgmmacau','wynn','grandlisboa','wharf'],
-                l: [
-                    { pts: [spots.icn.c, spots.mfm.c], c: '#64748b', dash: true },
-                    { pts: [spots.mfm.c, spots.venetian.c, spots.hotel.c], c: '#2563eb' },
-                    { pts: [spots.hotel.c, spots.stpaul.c, spots.senado.c, spots.mgmcotai.c, spots.taipa.c, spots.londoner.c, spots.parisian.c, spots.hotel.c], c: '#059669' },
-                    { pts: [spots.hotel.c, spots.galaxy.c, spots.cod.c, spots.hotel.c], c: '#0891b2' },
-                    { pts: [spots.hotel.c, spots.mgmmacau.c, spots.wynn.c, spots.grandlisboa.c, spots.wharf.c, spots.mfm.c], c: '#d97706' },
-                    { pts: [spots.mfm.c, spots.icn.c], c: '#64748b', dash: true }
-                ]
-            },
-            day1: { p: ['icn','mfm','venetian','hotel'], z: ['mfm','venetian','hotel'], l: [
-                { pts: [spots.icn.c, spots.mfm.c], c: '#64748b', dash: true },
-                { pts: [spots.mfm.c, spots.venetian.c, spots.hotel.c], c: '#2563eb' }
-            ]},
-            day2: { p: ['hotel','stpaul','senado','mgmcotai','taipa','londoner','parisian','hotel'], l: [
-                { pts: [spots.hotel.c, spots.stpaul.c, spots.senado.c], c: '#e11d48' },
-                { pts: [spots.senado.c, spots.mgmcotai.c, spots.taipa.c, spots.londoner.c, spots.parisian.c, spots.hotel.c], c: '#059669' }
-            ]},
-            day3: { p: ['hotel','galaxy','cod','hotel'], l: [{ pts: [spots.hotel.c, spots.galaxy.c, spots.cod.c, spots.hotel.c], c: '#0891b2' }] },
-            day4: { p: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm','icn'], z: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm'], l: [
-                { pts: [spots.hotel.c, spots.mgmmacau.c, spots.wynn.c, spots.grandlisboa.c, spots.wharf.c, spots.mfm.c], c: '#d97706' },
-                { pts: [spots.mfm.c, spots.icn.c], c: '#64748b', dash: true }
-            ]}
-        };
-
         const mapHints = {
-            all: '📍 전체 동선: 인천 ↔ 마카오 및 4일간 답사 경로',
+            all: '📍 전체 동선: 에어마카오 NX821·NX826 + 코타이 숙소',
             day1: '📍 1일차: 마카오 도착 후 베네시안 리조트 답사 동선',
             day2: '📍 2일차: 역사지구(반도) → 코타이 통합리조트 답사',
             day3: '📍 3일차: 갤럭시 공식 행사·안다즈 벤치마킹 → 댄싱 워터 쇼',
             day4: '📍 4일차: 마카오 반도 답사 후 공항 이동 · 귀국'
         };
+        const routes = {
+            all: {
+                p: ['icn','mfm','hotel'],
+                zoom: ['icn','mfm','hotel'],
+                maxZoom: 5,
+                legs: [
+                    { from:'icn', to:'mfm', mode:'air', color:'#64748b', label:'NX821 출국' },
+                    { from:'mfm', to:'hotel', mode:'road', color:'#2563eb' },
+                    { from:'mfm', to:'icn', mode:'air', color:'#64748b', label:'NX826 귀국' }
+                ]
+            },
+            day1: {
+                p: ['icn','mfm','venetian','hotel'],
+                zoom: ['mfm','venetian','hotel'],
+                maxZoom: 13,
+                legs: [
+                    { from:'icn', to:'mfm', mode:'air', color:'#64748b', label:'NX821 출국' },
+                    { from:'mfm', to:'venetian', mode:'road', color:'#2563eb' },
+                    { from:'venetian', to:'hotel', mode:'road', color:'#2563eb' }
+                ]
+            },
+            day2: {
+                p: ['hotel','stpaul','senado','mgmcotai','taipa','londoner','parisian'],
+                zoom: ['hotel','stpaul','senado','mgmcotai','taipa','londoner','parisian'],
+                maxZoom: 13,
+                legs: [
+                    { from:'hotel', to:'stpaul', mode:'road', color:'#e11d48' },
+                    { from:'stpaul', to:'senado', mode:'road', color:'#e11d48' },
+                    { from:'senado', to:'mgmcotai', mode:'road', color:'#059669' },
+                    { from:'mgmcotai', to:'taipa', mode:'road', color:'#059669' },
+                    { from:'taipa', to:'londoner', mode:'road', color:'#059669' },
+                    { from:'londoner', to:'parisian', mode:'road', color:'#059669' },
+                    { from:'parisian', to:'hotel', mode:'road', color:'#059669' }
+                ]
+            },
+            day3: {
+                p: ['hotel','galaxy','cod'],
+                zoom: ['hotel','galaxy','cod'],
+                maxZoom: 15,
+                legs: [
+                    { from:'hotel', to:'galaxy', mode:'road', color:'#0891b2' },
+                    { from:'galaxy', to:'cod', mode:'road', color:'#0891b2' },
+                    { from:'cod', to:'hotel', mode:'road', color:'#0891b2' }
+                ]
+            },
+            day4: {
+                p: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm','icn'],
+                zoom: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm'],
+                maxZoom: 13,
+                legs: [
+                    { from:'hotel', to:'mgmmacau', mode:'road', color:'#d97706' },
+                    { from:'mgmmacau', to:'wynn', mode:'road', color:'#d97706' },
+                    { from:'wynn', to:'grandlisboa', mode:'road', color:'#d97706' },
+                    { from:'grandlisboa', to:'wharf', mode:'road', color:'#d97706' },
+                    { from:'wharf', to:'mfm', mode:'road', color:'#d97706' },
+                    { from:'mfm', to:'icn', mode:'air', color:'#64748b', label:'NX826 귀국' }
+                ]
+            }
+        };
+
+        function isMobileView() {
+            return window.matchMedia('(max-width: 768px)').matches;
+        }
+        function setMapStatus(text) {
+            const el = document.getElementById('map-status-text');
+            if (el) el.textContent = text;
+        }
+        function pinIcon(spot) {
+            return L.divIcon({
+                className: 'custom-icon',
+                html: `<div class="map-pin-wrap">
+                    <div class="map-pin-dot" style="background:${spot.col};">${spot.i}</div>
+                    <span class="map-pin-label">${spot.t}</span>
+                </div>`,
+                iconSize: [96, 52],
+                iconAnchor: [48, 16]
+            });
+        }
+        function headingDeg(a, b) {
+            const lat1 = a[0] * Math.PI / 180;
+            const lat2 = b[0] * Math.PI / 180;
+            const dLng = (b[1] - a[1]) * Math.PI / 180;
+            const y = Math.sin(dLng) * Math.cos(lat2);
+            const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLng);
+            return (Math.atan2(y, x) * 180 / Math.PI + 360) % 360;
+        }
+        const PLANE_REST_DEG = 45;
+        function planeRotate(from, to) {
+            return headingDeg(from, to) - PLANE_REST_DEG;
+        }
+        function moverIcon(mode, from, to) {
+            const emoji = mode === 'air' ? '✈️' : '🚌';
+            const rot = (mode === 'air' && from && to) ? planeRotate(from, to) : 0;
+            return L.divIcon({
+                className: 'custom-icon',
+                html: `<div class="map-bus" style="transform:rotate(${rot}deg)">${emoji}</div>`,
+                iconSize: [28, 28],
+                iconAnchor: [14, 14]
+            });
+        }
+        function applyPlaneHeading(marker, from, to, mode) {
+            if (mode !== 'air' || !marker) return;
+            const el = marker.getElement();
+            if (!el) return;
+            const bus = el.querySelector('.map-bus');
+            if (bus) bus.style.transform = `rotate(${planeRotate(from, to)}deg)`;
+        }
+        function clearMapLayers() {
+            if (activeBus) activeBus._aborted = true;
+            activeBus = null;
+            mapLayers.forEach(layer => {
+                if (layer._aborted !== undefined) layer._aborted = true;
+                map.removeLayer(layer);
+            });
+            mapLayers = [];
+        }
+        async function roadPath(pts) {
+            const key = pts.map(p => p.join(',')).join('|');
+            if (osrmCache[key]) return osrmCache[key];
+            try {
+                const coords = pts.map(p => `${p[1]},${p[0]}`).join(';');
+                const res = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`);
+                const data = await res.json();
+                if (data.code === 'Ok' && data.routes && data.routes[0]) {
+                    const path = data.routes[0].geometry.coordinates.map(([lng, lat]) => [lat, lng]);
+                    osrmCache[key] = path;
+                    return path;
+                }
+            } catch (e) { /* fall back to straight line */ }
+            return pts;
+        }
+        function lineDuration(pixelLength, routeKey, mode) {
+            const mobile = isMobileView();
+            const allView = routeKey === 'all';
+            const min = mobile ? (allView ? 1600 : 2800) : (allView ? 900 : 1400);
+            const max = mobile ? (allView ? 2800 : 5600) : (allView ? 1800 : 2800);
+            const pxPerMs = mobile ? (allView ? 0.22 : 0.12) : 0.28;
+            let ms = Math.max(min, Math.min(max, pixelLength / pxPerMs));
+            if (mode === 'air') ms = Math.min(ms, mobile ? 2800 : 1600);
+            return ms;
+        }
+        function whenPathReady(polyline) {
+            return new Promise(resolve => {
+                let tries = 24;
+                const tick = () => {
+                    const el = polyline.getElement();
+                    if (el && typeof el.getTotalLength === 'function') resolve(el);
+                    else if (tries-- > 0) requestAnimationFrame(tick);
+                    else resolve(null);
+                };
+                requestAnimationFrame(tick);
+            });
+        }
+        function animateLine(polyline, duration, dashPattern) {
+            return new Promise(async resolve => {
+                const path = await whenPathReady(polyline);
+                if (!path) { resolve(duration); return; }
+                const length = path.getTotalLength();
+                const ms = duration || 1400;
+                path.style.transition = 'none';
+                path.style.strokeDasharray = length + ' ' + length;
+                path.style.strokeDashoffset = String(length);
+                path.getBoundingClientRect();
+                path.style.transition = `stroke-dashoffset ${ms}ms ease-in-out`;
+                path.style.strokeDashoffset = '0';
+                setTimeout(() => {
+                    if (dashPattern) {
+                        path.style.transition = 'none';
+                        path.style.strokeDasharray = dashPattern;
+                        path.style.strokeDashoffset = '0';
+                    }
+                    resolve(ms);
+                }, ms + 40);
+            });
+        }
+        function moveMarkerAlong(marker, latlngs, duration, mode) {
+            return new Promise(resolve => {
+                if (!marker || !latlngs || latlngs.length < 2) { resolve(); return; }
+                const dists = [0];
+                let total = 0;
+                for (let i = 1; i < latlngs.length; i++) {
+                    total += L.latLng(latlngs[i - 1]).distanceTo(L.latLng(latlngs[i]));
+                    dists.push(total);
+                }
+                if (total === 0) { resolve(); return; }
+                applyPlaneHeading(marker, latlngs[0], latlngs[1], mode);
+                const start = performance.now();
+                const ease = t => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+                function frame(now) {
+                    if (marker._aborted) { resolve(); return; }
+                    const t = Math.min(1, (now - start) / duration);
+                    const target = total * ease(t);
+                    let i = 1;
+                    while (i < dists.length && dists[i] < target) i++;
+                    const a = latlngs[i - 1];
+                    const b = latlngs[Math.min(i, latlngs.length - 1)];
+                    const span = (dists[i] - dists[i - 1]) || 1;
+                    const f = (target - dists[i - 1]) / span;
+                    marker.setLatLng([a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f]);
+                    applyPlaneHeading(marker, a, b, mode);
+                    if (t < 1) requestAnimationFrame(frame);
+                    else resolve();
+                }
+                requestAnimationFrame(frame);
+            });
+        }
+        async function resolveLegPath(leg) {
+            if (leg.mode === 'air') return [spots[leg.from].c, spots[leg.to].c];
+            return roadPath([spots[leg.from].c, spots[leg.to].c]);
+        }
+
+        async function drawMap(routeKey) {
+            if (!map) return;
+            const seq = ++mapDrawSeq;
+            clearMapLayers();
+            const routeData = routes[routeKey] || routes.day1;
+            const hint = mapHints[routeKey] || '';
+            const hintEl = document.getElementById('map-hint');
+            if (hintEl) hintEl.textContent = hint;
+            setMapStatus('실제 도로 동선을 불러오는 중...');
+
+            const zoomKeys = routeData.zoom || routeData.p;
+            let bounds = L.latLngBounds(zoomKeys.map(key => spots[key].c));
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: routeData.maxZoom || 13 });
+            setTimeout(() => map.invalidateSize(), 120);
+
+            const legs = routeData.legs;
+            const paths = await Promise.all(legs.map(leg => resolveLegPath(leg)));
+            if (seq !== mapDrawSeq) return;
+
+            paths.forEach((path, i) => {
+                if (legs[i].mode === 'air') return;
+                path.forEach(pt => bounds.extend(pt));
+            });
+            map.fitBounds(bounds, { padding: [50, 50], maxZoom: routeData.maxZoom || 13 });
+            await new Promise(r => setTimeout(r, 280));
+            if (seq !== mapDrawSeq) return;
+
+            const ghost = L.polyline(paths.flat(), { color: '#94a3b8', weight: 4, opacity: 0.22, lineJoin: 'round', lineCap: 'round' }).addTo(map);
+            mapLayers.push(ghost);
+
+            const placed = new Set();
+            const addPin = (key) => {
+                if (placed.has(key)) return;
+                placed.add(key);
+                const spot = spots[key];
+                const marker = L.marker(spot.c, { icon: pinIcon(spot), zIndexOffset: 200 })
+                    .addTo(map)
+                    .bindTooltip(spot.t, { direction: 'top', offset: [0, -16] });
+                mapLayers.push(marker);
+            };
+
+            let bus = L.marker(spots[legs[0].from].c, {
+                icon: moverIcon(legs[0].mode, spots[legs[0].from].c, spots[legs[0].to].c),
+                zIndexOffset: 900
+            }).addTo(map);
+            bus._aborted = false;
+            activeBus = bus;
+            mapLayers.push(bus);
+
+            for (let i = 0; i < legs.length; i++) {
+                if (seq !== mapDrawSeq) return;
+                const leg = legs[i];
+                const path = paths[i];
+                const dashPattern = leg.mode === 'air' ? '16, 12' : null;
+                addPin(leg.from);
+                setMapStatus(leg.label || `${spots[leg.from].t} → ${spots[leg.to].t}`);
+                if (bus) bus.setIcon(moverIcon(leg.mode, spots[leg.from].c, spots[leg.to].c));
+                const poly = L.polyline(path, {
+                    color: leg.color,
+                    weight: dashPattern ? 3.5 : 5,
+                    opacity: 0.95,
+                    dashArray: dashPattern,
+                    lineJoin: 'round',
+                    lineCap: 'round'
+                }).addTo(map);
+                if (leg.label) poly.bindTooltip('<b>'+leg.label+'</b>', { sticky: true, direction: 'center' });
+                mapLayers.push(poly);
+                const ready = await whenPathReady(poly);
+                const ms = lineDuration(ready ? ready.getTotalLength() : 400, routeKey, leg.mode);
+                await Promise.all([
+                    animateLine(poly, ms, dashPattern),
+                    moveMarkerAlong(bus, path, ms, leg.mode)
+                ]);
+                if (seq !== mapDrawSeq) return;
+                addPin(leg.to);
+                await new Promise(r => setTimeout(r, isMobileView() ? 280 : 140));
+            }
+            if (seq !== mapDrawSeq) return;
+            setMapStatus(hint);
+            if (bus && map.hasLayer(bus)) map.removeLayer(bus);
+            mapLayers = mapLayers.filter(layer => layer !== bus);
+            if (activeBus === bus) activeBus = null;
+            setTimeout(() => map.invalidateSize(), 160);
+        }
 
         function initMap() {
-            if(map || typeof L === 'undefined') return;
-            map = L.map('map', { scrollWheelZoom:false }).setView([22.17, 113.55], 12);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            if (map || typeof L === 'undefined') return;
+            map = L.map('map', { scrollWheelZoom: false });
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
                 maxZoom: 19,
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                attribution: 'Tiles &copy; Esri'
             }).addTo(map);
-            layerGroup = L.layerGroup().addTo(map);
-            changeMap('day1');
-            setTimeout(() => map.invalidateSize(), 300);
+            changeMap(isMobileView() ? 'day1' : 'all');
         }
 
         function changeMap(dayId) {
@@ -1480,53 +1783,14 @@
                 btn.classList.add('bg-white', 'text-slate-600', 'border-slate-300');
             });
             const activeBtn = document.querySelector(`#map-controls button[onclick="changeMap('${dayId}')"]`);
-            if(activeBtn) {
+            if (activeBtn) {
                 activeBtn.classList.add('active', 'bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
                 activeBtn.classList.remove('bg-white', 'text-slate-600', 'border-slate-300');
             }
-            const hint = document.getElementById('map-hint');
-            if(hint && mapHints[dayId]) hint.innerText = mapHints[dayId];
-
-            if(!map || !layerGroup) return;
-            layerGroup.clearLayers();
-            const route = routes[dayId];
-            if(!route) return;
-            let bounds = L.latLngBounds();
-
-            route.l.forEach(line => {
-                const pl = L.polyline(line.pts, { color: line.c, weight: 4, opacity: 0.85, dashArray: line.dash ? '8 10' : null }).addTo(layerGroup);
-                if(!line.dash){
-                    setTimeout(() => {
-                        const path = pl._path;
-                        if(path) {
-                            const len = path.getTotalLength();
-                            path.style.strokeDasharray = len; path.style.strokeDashoffset = len;
-                            path.getBoundingClientRect();
-                            path.style.transition = 'stroke-dashoffset 2s ease-in-out';
-                            path.style.strokeDashoffset = '0';
-                            setTimeout(() => { path.style.transition = ''; }, 2000);
-                        }
-                    }, 300);
-                }
-            });
-
-            route.p.forEach((key, idx) => {
-                const s = spots[key];
-                const icon = L.divIcon({
-                    className: 'map-marker-container',
-                    html: `<div class="map-marker-bubble" style="background-color:${s.col}; width:32px; height:32px; animation:popIn 0.5s forwards; animation-delay:${idx*0.2}s">${s.i}</div>`,
-                    iconSize: [32, 32], iconAnchor: [16,16]
-                });
-                L.marker(s.c, {icon}).bindTooltip(`<b>${s.t}</b>`, {direction:'top', offset:[0,-10]}).addTo(layerGroup);
-            });
-
-            (route.z || route.p).forEach(key => bounds.extend(spots[key].c));
-            const maxZoom = (dayId === 'all') ? 6 : 13;
-            map.fitBounds(bounds, { padding: [40, 40], maxZoom: maxZoom });
-            setTimeout(() => map.invalidateSize(), 300);
+            if (!map) return;
+            drawMap(dayId);
         }
 
-        // 하위 호환: 기존 링크에서 지도 갱신 + 해당 일차 일정으로 이동
         function changeMapAndTab(dayId) {
             changeMap(dayId === 'all' ? 'all' : dayId);
             const target = dayId === 'all' ? document.getElementById('schedule') : document.getElementById(dayId);
