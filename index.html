@@ -321,15 +321,15 @@
                         <span class="inline-block bg-blue-600 text-white text-xs px-3 py-1.5 rounded-md font-bold">통합리조트 운영 인사이트</span>
                     </div>
 
-                    <a href="#show" class="block bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform duration-300 ring-2 ring-cyan-400 relative">
+                    <div class="bg-slate-50 p-8 rounded-3xl border border-slate-100 shadow-sm hover:-translate-y-2 transition-transform duration-300 ring-2 ring-cyan-400 relative">
                         <div class="absolute -top-3 -right-3 bg-cyan-600 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">작년 최고 피드백</div>
                         <div class="w-16 h-16 bg-pink-100 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-inner">💧</div>
                         <h3 class="text-xl font-bold text-slate-800 mb-3">하우스 오브 댄싱 워터</h3>
                         <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                            작년 연수에서도 만족도가 가장 높았던 하이라이트. 3일차에 City of Dreams의 세계적 수상 공연을 관람합니다. 자세히 보기 →
+                            작년 연수에서도 만족도가 가장 높았던 하이라이트. 3일차에 City of Dreams의 세계적 수상 공연을 관람합니다.
                         </p>
-                        <span class="inline-block bg-pink-600 text-white text-xs px-3 py-1.5 rounded-md font-bold">3일차 관람 확정</span>
-                    </a>
+                        <span class="inline-block bg-pink-600 text-white text-xs px-3 py-1.5 rounded-md font-bold">3일차 관람</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -434,11 +434,6 @@
                     </div>
                 </div>
 
-                <p class="text-center mt-8">
-                    <a href="#schedule" onclick="changeMapAndTab('day3')" class="inline-flex items-center gap-2 text-sm font-bold text-indigo-700 hover:text-indigo-900 underline underline-offset-2">
-                        3일차 갤럭시·안다즈 벤치마킹 일정 보기 <i class="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
-                </p>
             </div>
         </section>
 
@@ -557,12 +552,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                    <a href="#schedule" onclick="changeMapAndTab('day3')" class="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold text-sm px-6 py-3 rounded-xl transition-colors shadow-lg shadow-cyan-500/20">
-                        <i class="fa-solid fa-calendar-day"></i> 3일차 상세일정 보기
-                    </a>
-                    <p class="text-xs text-slate-400 text-center sm:text-left">※ 공연 시각·좌석은 단체 예약 확정 후 인솔자가 안내합니다.</p>
-                </div>
+                <p class="text-center text-xs text-slate-400">※ 공연 시각·좌석은 인솔자가 안내합니다.</p>
             </div>
         </section>
 
@@ -572,7 +562,6 @@
                 <div class="text-center mb-10">
                     <span class="text-blue-600 font-black tracking-widest text-xs uppercase">FLIGHT & AIRPORT</span>
                     <h2 class="text-3xl font-bold text-slate-800 mt-2">항공 스케줄 및 공항 안내</h2>
-                    <p class="text-slate-500 mt-2 text-sm">에어마카오(NX) 직항 · 편명·시각은 1·2차 공통, 1차는 댄싱워터쇼 관람을 위해 하루 연기된 일정입니다.</p>
                 </div>
 
                 <div class="bg-white rounded-3xl border border-blue-100 shadow-md p-8 mb-10 overflow-hidden">
@@ -791,11 +780,6 @@
                     </div>
                 </div>
                 <p id="map-hint" class="text-center text-xs text-slate-500 mt-3">📍 1일차: 마카오 도착 후 베네시안 리조트 답사 동선</p>
-                <p class="text-center mt-5">
-                    <a href="#schedule" class="inline-flex items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-900 underline underline-offset-2">
-                        상세 일정표 보기 <i class="fa-solid fa-arrow-down text-xs"></i>
-                    </a>
-                </p>
             </div>
         </section>
 
@@ -843,7 +827,6 @@
                                 <div class="relative"><div class="timeline-dot bg-red-600 ring-red-100"></div><h4 class="font-bold text-base text-slate-800">베네시안 리조트 및 카지노 답사</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-slate-800 ring-slate-200"></div><h4 class="font-bold text-base text-slate-800">석식(샤브샤브 무제한) 후 호텔 투숙 · 휴식</h4><p class="text-slate-600 text-sm mt-1">BROADWAY MACAU HOTEL</p></div>
                             </div>
-                            <p class="mt-5 text-right"><button type="button" onclick="changeMap('day1'); document.getElementById('map-section').scrollIntoView({behavior:'smooth'})" class="text-xs font-bold text-blue-600 hover:underline">이 날 동선 지도 보기 →</button></p>
                         </div>
 
                         <!-- Day 2 -->
@@ -864,7 +847,6 @@
                                 <div class="relative"><div class="timeline-dot bg-indigo-600 ring-indigo-100"></div><h4 class="font-bold text-base text-slate-800">런더너 마카오 (근위병 교대식) 및 카지노 답사</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-slate-800 ring-slate-200"></div><h4 class="font-bold text-base text-slate-800">코타이 스트립 야경 · 파리지엥 에펠타워(내부)</h4><p class="text-slate-600 text-sm mt-1">석식 후 호텔 투숙 · 휴식</p></div>
                             </div>
-                            <p class="mt-5 text-right"><button type="button" onclick="changeMap('day2'); document.getElementById('map-section').scrollIntoView({behavior:'smooth'})" class="text-xs font-bold text-emerald-600 hover:underline">이 날 동선 지도 보기 →</button></p>
                         </div>
 
                         <!-- Day 3 -->
@@ -880,11 +862,11 @@
                             <img src="assets/images/day3-galaxy.jpg" alt="갤럭시 마카오" class="schedule-thumb mb-5 shadow-sm">
                             <div class="bg-blue-100/50 border border-blue-200 p-4 rounded-xl mb-4">
                                 <p class="text-sm text-blue-800 font-bold"><i class="fa-solid fa-lightbulb text-blue-600 mr-1"></i> 강원랜드 협력사 맞춤 벤치마킹</p>
-                                <p class="text-xs text-blue-900 mt-2 leading-relaxed">갤럭시 공식 방문 행사(Galaxy Presentation, Meeting Room 23)와 Arena·Andaz Room·GICC 베뉴 견학, 안다즈 호텔 운영 인프라(6F 체크인 로비·키친·라운지) 직접 체험·벤치마킹을 진행합니다. 숙소(브로드웨이) · 갤럭시 · 시티오브드림즈가 모두 도보권이라 이날은 전용차량 없이 걸어 이동합니다. · <a href="#galaxy" class="text-indigo-700 font-bold underline underline-offset-2">갤럭시 IR 인사이트</a></p>
+                                <p class="text-xs text-blue-900 mt-2 leading-relaxed">갤럭시 공식 방문 행사(Galaxy Presentation, Meeting Room 23)와 Arena·Andaz Room·GICC 베뉴 견학, 안다즈 호텔 운영 인프라(6F 체크인 로비·키친·라운지) 직접 체험·벤치마킹을 진행합니다. 숙소(브로드웨이) · 갤럭시 · 시티오브드림즈가 모두 도보권이라 이날은 전용차량 없이 걸어 이동합니다.</p>
                                 <p class="text-[11px] text-blue-700/80 mt-2 leading-relaxed">※ 갤럭시 공식 견학 세부 프로그램은 현지에 요청 중이며, 확정 전까지 <strong>작년(2025년) 기준</strong>으로 안내드립니다.</p>
                             </div>
                             <div class="bg-cyan-50 border border-cyan-200 p-4 rounded-xl mb-6">
-                                <p class="text-xs text-cyan-900 leading-relaxed"><i class="fa-solid fa-circle-check text-cyan-600 mr-1"></i> <strong>하우스 오브 댄싱 워터 쇼</strong>는 공연 스케줄에 맞춰 <strong>3일차</strong>에 관람합니다. (1차 출발일을 하루 연기해 쇼 관람이 가능하도록 항공·호텔을 조정했습니다.)</p>
+                                <p class="text-xs text-cyan-900 leading-relaxed"><i class="fa-solid fa-circle-check text-cyan-600 mr-1"></i> <strong>하우스 오브 댄싱 워터 쇼</strong>는 <strong>3일차</strong>에 관람합니다.</p>
                             </div>
                             <div class="relative border-l-2 border-slate-300 ml-4 pl-6 space-y-5">
                                 <div class="relative"><div class="timeline-dot bg-slate-400 ring-slate-100"></div><h4 class="font-bold text-base text-slate-800">호텔 조식 후 오전 자유 휴식</h4></div>
@@ -893,13 +875,12 @@
                                 <div class="relative">
                                     <div class="timeline-dot bg-amber-500 ring-amber-100"></div>
                                     <h4 class="font-bold text-base text-slate-800">중식 · JW 메리어트 어반 키친 런치뷔페</h4>
-                                    <p class="text-slate-600 text-sm mt-1">연수 포함 최고 품격 식음 체험 — 6개 스테이션 인터내셔널 뷔페 · <a href="#dining" class="text-amber-700 font-bold underline underline-offset-2">식음료체험 자세히</a></p>
+                                    <p class="text-slate-600 text-sm mt-1">연수 포함 최고 품격 식음 체험 — 6개 스테이션 인터내셔널 뷔페</p>
                                     <img src="assets/images/dining-buffet-spread.jpg" alt="Urban Kitchen 런치뷔페" class="mt-3 w-full max-w-sm md:max-w-md mx-auto aspect-[4/3] h-auto object-cover rounded-xl border border-amber-100 shadow-sm block">
                                 </div>
-                                <div class="relative"><div class="timeline-dot bg-cyan-600 ring-cyan-100"></div><h4 class="font-bold text-base text-slate-800">★ 하우스 오브 댄싱 워터 쇼 관람 ★</h4><p class="text-slate-600 text-sm mt-1">작년 연수 최고 피드백 프로그램 · <a href="#show" class="text-cyan-700 font-bold underline underline-offset-2">쇼 소개 자세히</a></p></div>
+                                <div class="relative"><div class="timeline-dot bg-cyan-600 ring-cyan-100"></div><h4 class="font-bold text-base text-slate-800">★ 하우스 오브 댄싱 워터 쇼 관람 ★</h4><p class="text-slate-600 text-sm mt-1">작년 연수 최고 피드백 프로그램</p></div>
                                 <div class="relative"><div class="timeline-dot bg-slate-800 ring-slate-200"></div><h4 class="font-bold text-base text-slate-800">석식(복룡식당) 후 호텔 투숙 · 휴식</h4></div>
                             </div>
-                            <p class="mt-5 text-right"><button type="button" onclick="changeMap('day3'); document.getElementById('map-section').scrollIntoView({behavior:'smooth'})" class="text-xs font-bold text-pink-600 hover:underline">이 날 동선 지도 보기 →</button></p>
                         </div>
 
                         <!-- Day 4 -->
@@ -919,7 +900,6 @@
                                 <div class="relative"><div class="timeline-dot bg-violet-600 ring-violet-100"></div><h4 class="font-bold text-base text-slate-800">샌즈 마카오 (피셔맨즈 워프) 관광</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-blue-600 ring-blue-100"></div><h4 class="font-bold text-base text-slate-800">18:10 마카오 출발 (NX826) · 인천 22:45 도착</h4></div>
                             </div>
-                            <p class="mt-5 text-right"><button type="button" onclick="changeMap('day4'); document.getElementById('map-section').scrollIntoView({behavior:'smooth'})" class="text-xs font-bold text-teal-600 hover:underline">이 날 동선 지도 보기 →</button></p>
                         </div>
                 </div>
             </div>
@@ -966,7 +946,7 @@
                             </div>
                         </div>
                         <div class="mt-5 bg-indigo-50 border border-indigo-100 rounded-xl p-4 text-xs text-indigo-800 leading-relaxed">
-                            <i class="fa-solid fa-star mr-1"></i> <strong>투어메이커 Note</strong> — 메인 단지에서 살짝 분리되어 조용하고 아늑한 휴식을 제공하면서도, 갤럭시의 모든 시설을 편리하게 이용할 수 있는 최적의 숙소입니다. · <a href="#galaxy" class="text-indigo-700 font-bold underline underline-offset-2">단지 호텔 포트폴리오 보기</a>
+                            <i class="fa-solid fa-star mr-1"></i> <strong>투어메이커 Note</strong> — 메인 단지에서 살짝 분리되어 조용하고 아늑한 휴식을 제공하면서도, 갤럭시의 모든 시설을 편리하게 이용할 수 있는 최적의 숙소입니다.
                             <p class="text-[11px] text-slate-500 mt-2">※ 객실 배정·부대시설은 현지 사정에 따라 변동될 수 있습니다.</p>
                         </div>
                     </div>
@@ -1115,19 +1095,13 @@
             <div class="container mx-auto px-4 max-w-5xl">
                 <div class="flex flex-col md:flex-row items-center gap-10">
                     <div class="md:w-5/12 text-center md:text-left">
-                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-2 mb-4">
-                            <span class="inline-block bg-emerald-700 text-emerald-100 text-xs px-3 py-1 rounded-full font-bold border border-emerald-600"><i class="fa-solid fa-file-shield mr-1"></i> Paperless DX</span>
-                            <span class="inline-flex items-center gap-1.5 bg-white/15 border border-white/25 text-amber-200 text-xs px-3 py-1 rounded-full font-bold">
-                                <span class="w-2 h-2 rounded-full bg-amber-300 animate-ping"></span>
-                                📊 실시간 가이드북 열람 : <strong class="tm-view-count-val text-white">...</strong>회
-                            </span>
-                        </div>
+                        <span class="inline-block bg-emerald-700 text-emerald-100 text-xs px-3 py-1 rounded-full font-bold mb-4 border border-emerald-600"><i class="fa-solid fa-file-shield mr-1"></i> Paperless DX</span>
                         <h2 class="text-3xl md:text-4xl font-bold mb-4 leading-tight">단순한 연수를 넘어<br>모범적인 ESG 실천으로</h2>
                         <p class="text-emerald-200 text-sm leading-relaxed mb-6">
                             강원랜드 협력사 연수는 수십 장의 종이 자료 대신 본 스마트 가이드북을 활용함으로써, 탄소 중립 실천과 디지털 전환(DX)의 모범 사례를 함께 만들어 갑니다.
                         </p>
                     </div>
-                    <div class="md:w-7/12 w-full grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="md:w-7/12 w-full grid grid-cols-2 lg:grid-cols-4 gap-4">
                         <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 text-center hover:bg-white/20 transition-colors">
                             <i class="fa-solid fa-file-lines text-3xl text-emerald-300 mb-3"></i>
                             <h4 class="text-emerald-100 text-xs font-bold mb-1">1인당 종이 절감</h4>
@@ -1143,8 +1117,13 @@
                             <h4 class="text-emerald-100 text-xs font-bold mb-1">물 절약 효과</h4>
                             <p class="text-3xl font-black">75<span class="text-sm font-medium ml-1">L</span></p>
                         </div>
-                        <div class="sm:col-span-3 text-center mt-2">
-                            <p class="text-[10px] text-emerald-300">※ 1인 기준 위 수치 · 1·2차 44명이면 종이 352장, 탄소 약 1.7kg, 물 3,300L입니다. 실시간 열람 <strong class="tm-view-count-val text-white">...</strong>회.</p>
+                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-amber-300/40 text-center hover:bg-white/20 transition-colors">
+                            <i class="fa-solid fa-eye text-3xl text-amber-200 mb-3"></i>
+                            <h4 class="text-amber-100 text-xs font-bold mb-1">📊 실시간 가이드북 열람</h4>
+                            <p class="text-3xl font-black"><span class="tm-view-count-val">...</span><span class="text-sm font-medium ml-1">회</span></p>
+                        </div>
+                        <div class="col-span-2 lg:col-span-4 text-center mt-2">
+                            <p class="text-[10px] text-emerald-300">※ 1인 기준 위 수치 · 1·2차 44명이면 종이 352장, 탄소 약 1.7kg, 물 3,300L입니다.</p>
                         </div>
                     </div>
                 </div>
@@ -1229,12 +1208,9 @@
     <footer class="bg-slate-100 pt-10 pb-20 text-center no-print border-t px-4">
         <div class="max-w-3xl mx-auto">
             <div class="bg-white rounded-3xl p-6 md:p-8 border border-blue-100 shadow-md mb-8 text-left md:text-center">
-                <div class="flex flex-wrap items-center justify-between md:justify-center gap-2 mb-3">
+                <div class="mb-3">
                     <span class="inline-flex items-center gap-1.5 bg-blue-50 text-[#004098] text-xs font-extrabold px-3 py-1 rounded-full border border-blue-200">
                         <i class="fa-solid fa-wand-magic-sparkles"></i> TOURMAKER SMART GUIDEBOOK
-                    </span>
-                    <span class="inline-flex items-center gap-1.5 bg-slate-100 text-slate-600 text-xs font-bold px-3 py-1 rounded-full">
-                        <i class="fa-solid fa-eye text-[#004098]"></i> 📊 실시간 가이드북 열람 : <strong class="tm-view-count-val text-[#004098]">...</strong>회
                     </span>
                 </div>
                 <h3 class="text-lg md:text-xl font-extrabold text-slate-800 mb-1.5">우리 모임·학교·기관도 스마트 가이드북으로 여행 준비하기</h3>
