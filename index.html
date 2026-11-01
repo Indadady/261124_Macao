@@ -225,7 +225,7 @@
             <p class="text-xs text-slate-500 mb-6 leading-relaxed">
                 본 가이드북은 저작권 및 일정 보호를 위해<br>
                 출발 2주 전까지 비밀번호 인증이 필요합니다.<br>
-                <span id="lock-password-hint" class="text-xs font-bold text-[#004098] mt-1 block">💡 힌트: 1차 출발일 MM월DD → MMDD (예: 11월24 → 1124)</span>
+                <span class="text-xs font-bold text-[#004098] mt-1 block">💡 힌트: 출발일 MM월DD일 → MMDD (예: 01월01일 → 0101)</span>
             </p>
             <div class="space-y-3">
                 <input type="password" id="lock-password-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="비밀번호 4자리 입력" class="w-full text-center tracking-widest text-lg font-bold border-2 border-slate-200 focus:border-[#004098] rounded-2xl px-4 py-3 outline-none transition" aria-label="비밀번호 4자리">
@@ -2480,16 +2480,12 @@
         })();
 
         (function initSmartSecurityLock() {
+            // 1차·2차 출발일 MMDD 모두 허용 (힌트는 형식 예시만 노출)
+            const PASS_LIST = (TRIPS || []).map((t) => (t.start || '').slice(5, 7) + (t.start || '').slice(8, 10)).filter(Boolean);
+            const VALID_PASSWORDS = PASS_LIST.length ? PASS_LIST : ['1124', '1130'];
             const EVENT_START_DATE = (TRIPS && TRIPS[0] && TRIPS[0].start) || '2026-11-24';
-            const AUTO_PASS_MM = EVENT_START_DATE.slice(5, 7);
-            const AUTO_PASS_DD = EVENT_START_DATE.slice(8, 10);
-            const AUTO_PASS_MMDD = AUTO_PASS_MM + AUTO_PASS_DD; // 1124
             const UNLOCK_DAYS_BEFORE = 14;
             const STORAGE_KEY = 'tm_unlocked_' + EVENT_START_DATE;
-            const hintEl = document.getElementById('lock-password-hint');
-            if (hintEl) {
-                hintEl.textContent = `💡 힌트: 1차 출발일 ${AUTO_PASS_MM}월${AUTO_PASS_DD} → ${AUTO_PASS_MMDD}`;
-            }
 
             function setLockVisible(on) {
                 const modal = document.getElementById('guidebook-lock-modal');
@@ -2520,7 +2516,7 @@
                 const inputEl = document.getElementById('lock-password-input');
                 const errorMsg = document.getElementById('lock-error-msg');
                 const inputVal = (inputEl?.value || '').trim();
-                if (inputVal === AUTO_PASS_MMDD) {
+                if (VALID_PASSWORDS.includes(inputVal)) {
                     localStorage.setItem(STORAGE_KEY, 'true');
                     if (errorMsg) errorMsg.classList.add('hidden');
                     setLockVisible(false);
