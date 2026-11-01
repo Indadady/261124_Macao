@@ -103,6 +103,10 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes lockShake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+        .shake { animation: lockShake .45s ease-in-out; }
+        body.tm-secure-select { -webkit-user-select: none; user-select: none; }
+        body.tm-secure-select input, body.tm-secure-select textarea { -webkit-user-select: text; user-select: text; }
         section { scroll-margin-top: 70px; }
         .schedule-thumb {
             width: 100%;
@@ -162,7 +166,7 @@
             @page { size: A4 portrait; margin: 8mm 8mm; }
             * { -webkit-print-color-adjust: exact !important; color-adjust: exact !important; print-color-adjust: exact !important; }
             body { background: white !important; color: black !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
-            header, footer, main, .no-print, #phrase-modal, #toast, #custom-confirm, #tm-inquiry-modal, #event-day-bar { display: none !important; }
+            header, footer, main, .no-print, #phrase-modal, #toast, #custom-confirm, #tm-inquiry-modal, #event-day-bar, #guidebook-lock-modal { display: none !important; }
             #print-area { display: block !important; width: 100%; }
             .print-page { display: flex; flex-direction: column; width: 100%; min-height: 278mm; box-sizing: border-box; }
             .print-page-break { page-break-after: always; break-after: page; }
@@ -209,7 +213,32 @@
         }
     </style>
 </head>
-<body class="antialiased pb-20 md:pb-0 print:bg-white relative">
+<body class="antialiased pb-20 md:pb-0 print:bg-white relative tm-secure-select">
+
+    <!-- [Security Lock Modal] 출발 2주 전 자동 해제형 보안 잠금 (비번: 1차 출발일 MMDD) -->
+    <div id="guidebook-lock-modal" class="fixed inset-0 z-[999] hidden items-center justify-center bg-slate-900/90 backdrop-blur-md px-4 no-print" role="dialog" aria-modal="true" aria-labelledby="guidebook-lock-title">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-6 md:p-8 shadow-2xl text-center border border-slate-100 animate-fade-in-up">
+            <div class="w-16 h-16 bg-blue-50 text-[#004098] rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 id="guidebook-lock-title" class="text-xl font-bold text-slate-800 mb-1">보안 접속 인증</h3>
+            <p class="text-xs text-slate-500 mb-6 leading-relaxed">
+                본 가이드북은 저작권 및 일정 보호를 위해<br>
+                출발 2주 전까지 비밀번호 인증이 필요합니다.<br>
+                <span class="text-xs font-bold text-[#004098] mt-1 block">💡 힌트: 1차 출발 날짜 4자리 (예: 11월 24일 ➔ 1124)</span>
+            </p>
+            <div class="space-y-3">
+                <input type="password" id="lock-password-input" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="비밀번호 4자리 입력" class="w-full text-center tracking-widest text-lg font-bold border-2 border-slate-200 focus:border-[#004098] rounded-2xl px-4 py-3 outline-none transition" aria-label="비밀번호 4자리">
+                <button type="button" onclick="verifyGuidebookPassword()" class="w-full bg-[#004098] hover:bg-[#002d6b] text-white font-bold py-3.5 rounded-2xl shadow-md transition text-sm">
+                    가이드북 입장하기
+                </button>
+            </div>
+            <p id="lock-error-msg" class="text-xs text-rose-600 font-bold mt-3 hidden">비밀번호가 일치하지 않습니다.</p>
+            <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400">
+                [System Powered by TOURMAKER] 지적재산권 보호 구역
+            </div>
+        </div>
+    </div>
     <!-- Header (Sticky Navigation) -->
     <header class="bg-white/95 backdrop-blur-md shadow-md sticky top-0 z-50 transition-all duration-300 no-print">
         <nav class="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -654,51 +683,51 @@
                     </a>
                 </div>
 
-                <div id="powerbank" class="mt-6 bg-rose-50/90 rounded-3xl border-2 border-rose-200 p-6 md:p-8 shadow-sm">
-                    <div class="flex flex-wrap items-center justify-between gap-2 mb-4 pb-3 border-b border-rose-200/80">
-                        <div class="flex items-center gap-2.5">
-                            <span class="bg-rose-600 text-white w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">
+                <div id="powerbank" class="bg-white rounded-3xl shadow-md border border-rose-100 p-6 md:p-8 mb-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-5">
+                        <div class="flex items-center gap-2.5 min-w-0">
+                            <span class="bg-rose-500 text-white w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-sm shrink-0">
                                 <i class="fa-solid fa-battery-exclamation"></i>
                             </span>
-                            <div>
-                                <h3 class="font-extrabold text-slate-800 text-base md:text-lg">보조배터리 및 전자담배 기내반입 기준 안내</h3>
-                                <p class="text-xs text-rose-700 font-semibold">기내 휴대만 가능합니다. 위탁 수하물에는 넣지 마세요.</p>
+                            <div class="min-w-0 text-left">
+                                <h3 class="font-extrabold text-slate-800 text-base md:text-lg leading-snug">보조배터리 · 전자담배 기내반입</h3>
+                                <p class="text-xs text-slate-500 mt-0.5">항공사 공통 안전 규정 · 출국 전 확인</p>
                             </div>
                         </div>
-                        <span class="bg-white text-rose-700 border border-rose-300 text-xs font-extrabold px-3 py-1 rounded-full">위탁 수하물 절대 금지</span>
+                        <span class="bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-extrabold px-3 py-1 rounded-full shrink-0">위탁 수하물 절대 금지</span>
                     </div>
-                    <div class="grid md:grid-cols-2 gap-3 text-xs md:text-sm text-slate-700">
-                        <div class="bg-white rounded-2xl p-4 border border-rose-100 flex items-start gap-3">
+                    <div class="grid sm:grid-cols-2 gap-3">
+                        <div class="rounded-2xl bg-rose-50/70 border border-rose-100 p-4 flex items-start gap-3">
                             <i class="fa-solid fa-ban text-rose-600 mt-0.5 shrink-0"></i>
                             <div>
-                                <p class="font-bold text-slate-800">기내 사용 및 충전 금지 (위탁 수하물 금지)</p>
-                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">부치는 큰 가방에 넣을 수 없으며, <strong>비행기 안에서도 보조배터리 사용·충전이 금지</strong>됩니다.</p>
+                                <p class="font-bold text-slate-800 text-sm">기내 사용·충전 금지</p>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">위탁 가방 금지 · 기내에서도 사용·충전 불가</p>
                             </div>
                         </div>
-                        <div class="bg-white rounded-2xl p-4 border border-rose-100 flex items-start gap-3">
-                            <i class="fa-solid fa-hand-holding-hand text-rose-600 mt-0.5 shrink-0"></i>
+                        <div class="rounded-2xl bg-rose-50/70 border border-rose-100 p-4 flex items-start gap-3">
+                            <i class="fa-solid fa-suitcase-rolling text-rose-600 mt-0.5 shrink-0"></i>
                             <div>
-                                <p class="font-bold text-slate-800">기내 선반(머리 위 짐칸) 보관 불가</p>
-                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">선반 가방에 넣지 말고, <strong>직접 휴대하거나 좌석 앞주머니</strong>에 보관해 주세요.</p>
+                                <p class="font-bold text-slate-800 text-sm">머리 위 선반 보관 불가</p>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">직접 휴대 또는 앞좌석 주머니에 보관</p>
                             </div>
                         </div>
-                        <div class="bg-white rounded-2xl p-4 border border-rose-100 flex items-start gap-3">
+                        <div class="rounded-2xl bg-rose-50/70 border border-rose-100 p-4 flex items-start gap-3">
                             <i class="fa-solid fa-shield-halved text-rose-600 mt-0.5 shrink-0"></i>
                             <div>
-                                <p class="font-bold text-slate-800">단락 방지 조치 필수</p>
-                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">단자에 <strong>절연테이프</strong> 또는 <strong>투명 비닐백 개별 보관</strong> · 전자담배는 <strong>전원 OFF</strong></p>
+                                <p class="font-bold text-slate-800 text-sm">단락 방지 필수</p>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">절연테이프·투명 비닐백 · 전자담배 전원 OFF</p>
                             </div>
                         </div>
-                        <div class="bg-white rounded-2xl p-4 border border-rose-100 flex items-start gap-3">
+                        <div class="rounded-2xl bg-rose-50/70 border border-rose-100 p-4 flex items-start gap-3">
                             <i class="fa-solid fa-bolt text-rose-600 mt-0.5 shrink-0"></i>
                             <div>
-                                <p class="font-bold text-slate-800">용량 · 개수 제한</p>
-                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">1인 <strong>최대 2개</strong> · <strong>160Wh 초과 불가</strong> (100~160Wh는 카운터 승인 / 파손·리콜 제품 금지)</p>
+                                <p class="font-bold text-slate-800 text-sm">용량 · 개수 제한</p>
+                                <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">1인 최대 2개 · 160Wh 초과 불가 (100~160Wh 카운터 승인)</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p class="text-center text-xs text-slate-500 mt-5">※ 항공사 정책·당일 공항 사정에 따라 변동될 수 있습니다.</p>
+                <p class="text-center text-xs text-slate-500">※ 항공사 정책·당일 공항 사정에 따라 변동될 수 있습니다.</p>
             </div>
         </section>
 
@@ -1124,6 +1153,11 @@
                         </p>
                     </div>
                     <div class="md:w-7/12 w-full grid grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-amber-500/15 backdrop-blur-md rounded-2xl p-6 border border-amber-300/40 text-center hover:bg-white/20 transition-colors">
+                            <i class="fa-solid fa-eye text-3xl text-amber-200 mb-3"></i>
+                            <h4 class="text-amber-100 text-xs font-bold mb-1">📊 실시간 가이드북 열람</h4>
+                            <p class="text-3xl font-black"><span class="tm-view-count-val">...</span><span class="text-sm font-medium ml-1">회</span></p>
+                        </div>
                         <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/20 text-center hover:bg-white/20 transition-colors">
                             <i class="fa-solid fa-file-lines text-3xl text-emerald-300 mb-3"></i>
                             <h4 class="text-emerald-100 text-xs font-bold mb-1">1인당 종이 절감</h4>
@@ -1139,13 +1173,8 @@
                             <h4 class="text-emerald-100 text-xs font-bold mb-1">물 절약 효과</h4>
                             <p class="text-3xl font-black">75<span class="text-sm font-medium ml-1">L</span></p>
                         </div>
-                        <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-amber-300/40 text-center hover:bg-white/20 transition-colors">
-                            <i class="fa-solid fa-eye text-3xl text-amber-200 mb-3"></i>
-                            <h4 class="text-amber-100 text-xs font-bold mb-1">📊 실시간 가이드북 열람</h4>
-                            <p class="text-3xl font-black"><span class="tm-view-count-val">...</span><span class="text-sm font-medium ml-1">회</span></p>
-                        </div>
                         <div class="col-span-2 lg:col-span-4 text-center mt-2">
-                            <p class="text-[10px] text-emerald-300">※ 1인 기준 위 수치 · 1·2차 44명이면 종이 352장, 탄소 약 1.7kg, 물 3,300L입니다.</p>
+                            <p class="text-[10px] text-emerald-300">※ 1인 기준 추정 수치입니다. 실제 절감량은 인쇄·배포 방식에 따라 달라질 수 있습니다.</p>
                         </div>
                     </div>
                 </div>
@@ -1245,6 +1274,13 @@
                         투어메이커 홈페이지 <i class="fa-solid fa-chevron-right text-xs"></i>
                     </a>
                 </div>
+            </div>
+            <div class="max-w-2xl mx-auto mb-5 px-4 py-3 rounded-xl bg-slate-200/70 border border-slate-300 text-[11px] text-slate-600 leading-relaxed text-left">
+                <p class="font-bold text-slate-800 mb-0.5">
+                    <i class="fa-solid fa-shield-halved text-[#004098] mr-1"></i> 지적재산권 보호 및 외부 유출 금지 안내
+                </p>
+                본 스마트 가이드북은 <strong>(주)투어메이커의 고유 지적재산</strong>입니다.
+                <strong class="tm-client-name">강원랜드 협력사</strong> 전용 제안서·스마트 가이드북이며, 외부 유출 시 <strong>접속 IP 및 열람 횟수(현재 <span class="tm-view-count-val font-extrabold text-red-600">...</span>회)가 자동 기록</strong>됩니다.
             </div>
             <div class="pt-4 border-t border-slate-300/50">
                 <p class="text-[11px] font-black text-[#004098] mb-2 tracking-wider">[System Powered by TOURMAKER]</p>
@@ -2338,8 +2374,10 @@
         window.addEventListener('afterprint', () => { document.title = PAGE_TITLE; });
         initEventDayUI();
 
-        const TM_GUIDEBOOK_SLUG = '261124_Macao';
+        const TM_GUIDEBOOK_SLUG = '261124_Macao'; // 기존 열람 카운터 슬러그 유지
         const TM_GUIDEBOOK_NAME = '강원랜드 협력사 마카오 연수';
+        const TM_CLIENT_NAME = '강원랜드 협력사'; // 무단공유 안내 [단체명]
+        document.querySelectorAll('.tm-client-name').forEach((el) => { el.textContent = TM_CLIENT_NAME; });
         function openTmInquiryModal() {
             const modal = document.getElementById('tm-inquiry-modal');
             if (!modal) return;
@@ -2401,6 +2439,111 @@
             els.forEach(el => { el.textContent = count.toLocaleString(); });
         }
         initTmViewCounter();
+
+        // ==========================================
+        // [투어메이커] 경량 복사·우클릭 차단 + 스마트 보안 잠금
+        // 잠금: 1차 출발 2주 전(D-14)보다 이전이면 MMDD 비번 / D-14부터 자동 해제
+        // ==========================================
+        (function initSecurityShield() {
+            const isEditable = (el) => {
+                if (!el) return false;
+                const tag = (el.tagName || '').toUpperCase();
+                return tag === 'INPUT' || tag === 'TEXTAREA' || el.isContentEditable;
+            };
+            document.addEventListener('contextmenu', (e) => {
+                if (isEditable(e.target)) return;
+                e.preventDefault();
+            });
+            document.addEventListener('selectstart', (e) => {
+                if (isEditable(e.target)) return;
+                e.preventDefault();
+            });
+            document.addEventListener('dragstart', (e) => {
+                if (isEditable(e.target)) return;
+                e.preventDefault();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (isEditable(e.target)) return;
+                const key = (e.key || '').toUpperCase();
+                const mod = e.ctrlKey || e.metaKey;
+                if (
+                    key === 'F12' ||
+                    (mod && e.shiftKey && ['I', 'J', 'C'].includes(key)) ||
+                    (mod && ['C', 'U', 'S'].includes(key))
+                ) {
+                    e.preventDefault();
+                    if (typeof showToast === 'function') {
+                        showToast('🔒 투어메이커 저작권 보호 문서로 복사 및 소스 열람이 제한됩니다.');
+                    }
+                }
+            });
+        })();
+
+        (function initSmartSecurityLock() {
+            const EVENT_START_DATE = (TRIPS && TRIPS[0] && TRIPS[0].start) || '2026-11-24';
+            const AUTO_PASS_MMDD = EVENT_START_DATE.slice(5, 7) + EVENT_START_DATE.slice(8, 10); // 1124
+            const UNLOCK_DAYS_BEFORE = 14;
+            const STORAGE_KEY = 'tm_unlocked_' + EVENT_START_DATE;
+
+            function setLockVisible(on) {
+                const modal = document.getElementById('guidebook-lock-modal');
+                if (!modal) return;
+                modal.classList.toggle('hidden', !on);
+                modal.classList.toggle('flex', on);
+                document.documentElement.style.overflow = on ? 'hidden' : '';
+                document.body.style.overflow = on ? 'hidden' : '';
+            }
+
+            function shouldRequirePassword() {
+                const today = getGuidebookToday();
+                return ymdDiffDays(EVENT_START_DATE, today) > UNLOCK_DAYS_BEFORE;
+            }
+
+            function checkLockCondition() {
+                const unlocked = localStorage.getItem(STORAGE_KEY) === 'true';
+                if (shouldRequirePassword() && !unlocked) {
+                    setLockVisible(true);
+                    const input = document.getElementById('lock-password-input');
+                    if (input) setTimeout(() => input.focus(), 80);
+                } else {
+                    setLockVisible(false);
+                }
+            }
+
+            window.verifyGuidebookPassword = function () {
+                const inputEl = document.getElementById('lock-password-input');
+                const errorMsg = document.getElementById('lock-error-msg');
+                const inputVal = (inputEl?.value || '').trim();
+                if (inputVal === AUTO_PASS_MMDD) {
+                    localStorage.setItem(STORAGE_KEY, 'true');
+                    if (errorMsg) errorMsg.classList.add('hidden');
+                    setLockVisible(false);
+                    if (typeof showToast === 'function') {
+                        showToast('🔓 인증되었습니다. 가이드북을 열람합니다.');
+                    }
+                } else {
+                    if (errorMsg) errorMsg.classList.remove('hidden');
+                    if (inputEl) {
+                        inputEl.classList.add('border-rose-500', 'shake');
+                        setTimeout(() => inputEl.classList.remove('border-rose-500', 'shake'), 500);
+                        inputEl.select();
+                    }
+                }
+            };
+
+            document.getElementById('lock-password-input')?.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    window.verifyGuidebookPassword();
+                }
+            });
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', checkLockCondition);
+            } else {
+                checkLockCondition();
+            }
+        })();
     </script>
 
 </body>
