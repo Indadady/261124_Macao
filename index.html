@@ -345,7 +345,7 @@
                         <div class="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6 text-3xl shadow-inner">🏛️</div>
                         <h3 class="text-xl font-bold text-slate-800 mb-3">갤럭시 · 안다즈 공식 벤치마킹</h3>
                         <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                            11:00 GICC·안다즈·JW·리츠칼튼·Grand Resort Deck 시설 투어 → 12:00 Urban Kitchen 런치 → 14:30 GICC Meeting Room Presentation으로 이어지는 갤럭시 공식 일정을 진행합니다.
+                            11:00 갤럭시호텔 컨벤션센터(GICC)·안다즈·JW·리츠칼튼·Grand Resort Deck 시설 투어 → 12:00 Urban Kitchen 런치 → 14:30 GICC 프레젠테이션으로 이어지는 갤럭시 공식 일정을 진행합니다.
                         </p>
                         <span class="inline-block bg-blue-600 text-white text-xs px-3 py-1.5 rounded-md font-bold">통합리조트 운영 인사이트</span>
                     </div>
@@ -397,8 +397,8 @@
                     </div>
                     <div class="bg-white rounded-2xl border-2 border-emerald-500 p-4 shadow-sm relative">
                         <span class="absolute -top-2.5 left-4 text-[10px] font-bold bg-emerald-600 text-white px-2 py-0.5 rounded">견학</span>
-                        <h4 class="font-bold text-slate-800 mt-1 mb-1">Andaz · GICC</h4>
-                        <p class="text-xs text-slate-600 leading-relaxed">GICC·안다즈 게스트룸 공식 견학</p>
+                        <h4 class="font-bold text-slate-800 mt-1 mb-1">Andaz · 컨벤션센터</h4>
+                        <p class="text-xs text-slate-600 leading-relaxed">갤럭시호텔 컨벤션센터(GICC)·안다즈 게스트룸 견학</p>
                     </div>
                     <div class="bg-white rounded-2xl border-2 border-amber-500 p-4 shadow-sm relative">
                         <span class="absolute -top-2.5 left-4 text-[10px] font-bold bg-amber-600 text-white px-2 py-0.5 rounded">견학·중식</span>
@@ -734,12 +734,13 @@
                     </div>
                 </div>
 
-                <div class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-6 justify-start md:justify-center">
-                    <a href="#day1" class="px-4 py-2 rounded-full border border-blue-200 bg-white text-blue-700 text-sm font-bold shrink-0 hover:bg-blue-50">1일차</a>
-                    <a href="#day2" class="px-4 py-2 rounded-full border border-emerald-200 bg-white text-emerald-700 text-sm font-bold shrink-0 hover:bg-emerald-50">2일차</a>
-                    <a href="#day3" class="px-4 py-2 rounded-full border border-pink-200 bg-white text-pink-700 text-sm font-bold shrink-0 hover:bg-pink-50">3일차</a>
-                    <a href="#day4" class="px-4 py-2 rounded-full border border-teal-200 bg-white text-teal-700 text-sm font-bold shrink-0 hover:bg-teal-50">4일차</a>
+                <div id="schedule-tabs" class="flex gap-2 overflow-x-auto no-scrollbar pb-3 mb-6 justify-start md:justify-center">
+                    <button type="button" data-day="day1" onclick="showScheduleDay('day1')" class="schedule-tab-btn active px-4 py-2 rounded-full border border-blue-600 bg-blue-600 text-white text-sm font-bold shadow-sm shrink-0">1일차 · 11.24</button>
+                    <button type="button" data-day="day2" onclick="showScheduleDay('day2')" class="schedule-tab-btn px-4 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-sm font-bold shrink-0">2일차 · 11.25</button>
+                    <button type="button" data-day="day3" onclick="showScheduleDay('day3')" class="schedule-tab-btn px-4 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-sm font-bold shrink-0">3일차 · 11.26</button>
+                    <button type="button" data-day="day4" onclick="showScheduleDay('day4')" class="schedule-tab-btn px-4 py-2 rounded-full border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 text-sm font-bold shrink-0">4일차 · 11.27</button>
                 </div>
+                <p class="text-center text-[11px] text-slate-400 mb-4 -mt-3">날짜를 누르면 해당 일차만 보입니다. (2차는 각 +6일)</p>
 
                 <div class="space-y-6">
                         <!-- Day 1 -->
@@ -764,7 +765,7 @@
                         </div>
 
                         <!-- Day 2 -->
-                        <div id="day2" class="schedule-content bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
+                        <div id="day2" class="schedule-content hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
                             <div class="flex items-center gap-4 mb-6 border-b pb-4 schedule-mobile-head">
                                 <div class="bg-emerald-600 text-white text-xl font-bold w-12 h-12 rounded-xl flex items-center justify-center shrink-0">2일</div>
                                 <div>
@@ -784,7 +785,7 @@
                         </div>
 
                         <!-- Day 3 -->
-                        <div id="day3" class="schedule-content bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
+                        <div id="day3" class="schedule-content hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
                             <div class="flex items-center gap-4 mb-6 border-b pb-4 schedule-mobile-head">
                                 <div class="bg-pink-600 text-white text-xl font-bold w-12 h-12 rounded-xl flex items-center justify-center shrink-0">3일</div>
                                 <div>
@@ -796,7 +797,7 @@
                             <img src="assets/images/day3-galaxy.jpg" alt="갤럭시 마카오" class="schedule-thumb mb-5 shadow-sm">
                             <div class="bg-blue-100/50 border border-blue-200 p-4 rounded-xl mb-4">
                                 <p class="text-sm text-blue-800 font-bold"><i class="fa-solid fa-lightbulb text-blue-600 mr-1"></i> 갤럭시 공식행사 타임테이블 반영</p>
-                                <p class="text-xs text-blue-900 mt-2 leading-relaxed">갤럭시에서 안내한 차수별 공식 일정(시설 투어 → Urban Kitchen Lunch → GICC Meeting Room Presentation)을 반영했습니다. 숙소(브로드웨이) · 갤럭시 · 시티오브드림즈가 모두 도보권이라 이날은 전용차량 없이 걸어 이동합니다.</p>
+                                <p class="text-xs text-blue-900 mt-2 leading-relaxed">시설 투어 → Urban Kitchen Lunch → 갤럭시호텔 컨벤션센터(GICC) Presentation 순입니다. 숙소·갤럭시·시티오브드림즈가 도보권이라 전용차량 없이 이동합니다.</p>
                             </div>
                             <div class="bg-cyan-50 border border-cyan-200 p-4 rounded-xl mb-6">
                                 <p class="text-xs text-cyan-900 leading-relaxed"><i class="fa-solid fa-circle-check text-cyan-600 mr-1"></i> <strong>하우스 오브 댄싱 워터 쇼</strong>는 <strong>3일차</strong>에 관람합니다.</p>
@@ -809,12 +810,12 @@
                                     <div class="mt-2 space-y-2">
                                         <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
                                             <p class="text-[11px] font-bold text-blue-700 mb-1">1차 그룹 · Group 1 (11.26)</p>
-                                            <p class="text-slate-600 text-sm leading-relaxed">GICC Hall AB → GICC Meeting Rooms (Auditorium) → Andaz Guestrooms → JW Marriott Macau → The Ritz-Carlton Macau → Grand Resort Deck</p>
+                                            <p class="text-slate-600 text-sm leading-relaxed">갤럭시호텔 컨벤션센터(GICC) Hall AB → Meeting Rooms (Auditorium) → Andaz Guestrooms → JW Marriott → Ritz-Carlton → Grand Resort Deck</p>
                                         </div>
                                         <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-3">
                                             <p class="text-[11px] font-bold text-indigo-700 mb-1">2차 그룹 · Group 2 (12.02)</p>
-                                            <p class="text-slate-600 text-sm leading-relaxed">GICC Meeting Rooms (Auditorium) → Andaz Guestrooms → JW Marriott Macau → The Ritz-Carlton Macau → Grand Resort Deck</p>
-                                            <p class="text-[11px] text-indigo-600/80 mt-1">※ 2차는 GICC Hall AB 구간이 없습니다.</p>
+                                            <p class="text-slate-600 text-sm leading-relaxed">갤럭시호텔 컨벤션센터(GICC) Meeting Rooms (Auditorium) → Andaz Guestrooms → JW Marriott → Ritz-Carlton → Grand Resort Deck</p>
+                                            <p class="text-[11px] text-indigo-600/80 mt-1">※ 2차는 Hall AB 구간이 없습니다.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -826,16 +827,53 @@
                                 </div>
                                 <div class="relative">
                                     <div class="timeline-dot bg-violet-600 ring-violet-100"></div>
-                                    <h4 class="font-bold text-base text-slate-800">14:30 GICC Meeting Room Presentation</h4>
-                                    <p class="text-slate-600 text-sm mt-1">갤럭시 공식 프레젠테이션 · 1·2차 공통</p>
+                                    <h4 class="font-bold text-base text-slate-800">14:30 갤럭시호텔 컨벤션센터(GICC) Presentation</h4>
+                                    <p class="text-slate-600 text-sm mt-1">Meeting Room 공식 프레젠테이션 · 1·2차 공통</p>
                                 </div>
                                 <div class="relative"><div class="timeline-dot bg-cyan-600 ring-cyan-100"></div><h4 class="font-bold text-base text-slate-800">★ 하우스 오브 댄싱 워터 쇼 관람 ★</h4><p class="text-slate-600 text-sm mt-1">작년 연수 최고 피드백 프로그램</p></div>
                                 <div class="relative"><div class="timeline-dot bg-slate-800 ring-slate-200"></div><h4 class="font-bold text-base text-slate-800">석식(복룡식당) 후 호텔 투숙 · 휴식</h4></div>
                             </div>
+
+                            <div class="mt-8 pt-6 border-t border-slate-100">
+                                <h4 class="font-bold text-slate-800 mb-1">방문 주요 장소 안내</h4>
+                                <p class="text-xs text-slate-500 mb-4">타임테이블에 나오는 곳을 짧게 정리했습니다.</p>
+                                <div class="grid sm:grid-cols-2 gap-3">
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-blue-700 mb-1">🎤 컨벤션</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">갤럭시호텔 컨벤션센터 (GICC)</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">갤럭시 마카오의 MICE 전용 컨벤션센터. Arena·안다즈와 실내로 연결됩니다. Hall AB는 대형 전시·연회홀, Meeting Rooms(Auditorium)는 대강당·회의실 구역입니다.</p>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-emerald-700 mb-1">🏨 호텔</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">Andaz Macau</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">GICC 바로 옆 하얏트 라이프스타일 호텔. 전용 통로로 컨벤션과 연결되며, 이번 투어에서 게스트룸을 견학합니다.</p>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-amber-700 mb-1">🏨 호텔</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">JW 메리어트 호텔 마카오</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">갤럭시 단지 내 5성급 호텔. Grand Resort Deck 접근이 좋고, 1층 Urban Kitchen이 중식 장소입니다.</p>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-violet-700 mb-1">🏨 호텔</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">리츠칼튼 마카오</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">JW와 같은 타워 상층부의 전 객실 스위트 컨셉 호텔. VIP·임원 숙소 인스펙션 관점으로 코스에 포함됩니다.</p>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-sky-700 mb-1">📍 워터파크</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">Grand Resort Deck</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">단지 중앙의 스카이톱 워터파크·야외 가든. 공중 파도풀·유수풀·인공 해변과 야외 이벤트 공간으로 쓰입니다.</p>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                        <p class="text-[11px] font-bold text-orange-700 mb-1">🍽️ 다이닝</p>
+                                        <p class="font-bold text-sm text-slate-800 mb-1">Urban Kitchen</p>
+                                        <p class="text-xs text-slate-600 leading-relaxed">JW 메리어트 1층 인터내셔널 뷔페. 오픈 키친 스테이션에서 해산물·중식·세계요리를 제공하며, 시설 투어 직후 중식 장소입니다.</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Day 4 -->
-                        <div id="day4" class="schedule-content bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
+                        <div id="day4" class="schedule-content hidden bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 animate-fade-in-up scroll-mt-24">
                             <div class="flex items-center gap-4 mb-6 border-b pb-4 schedule-mobile-head">
                                 <div class="bg-teal-600 text-white text-xl font-bold w-12 h-12 rounded-xl flex items-center justify-center shrink-0">4일</div>
                                 <div>
@@ -1397,10 +1435,10 @@
                                 <ul class="tm-desc-list">
                                     <li>호텔 조식 후 오전 자유 휴식</li>
                                     <li>11:00 <span class="tm-highlight">갤럭시 공식 시설 투어</span></li>
-                                    <li>1차: GICC Hall AB → Auditorium → Andaz → JW → Ritz → Grand Resort Deck</li>
-                                    <li>2차: Auditorium → Andaz → JW → Ritz → Grand Resort Deck</li>
+                                    <li>1차: 갤럭시호텔 컨벤션센터 Hall AB → Auditorium → Andaz → JW → Ritz → Deck</li>
+                                    <li>2차: 갤럭시호텔 컨벤션센터 Auditorium → Andaz → JW → Ritz → Deck</li>
                                     <li>12:00 <span class="tm-highlight">Urban Kitchen Lunch</span></li>
-                                    <li>14:30 <span class="tm-highlight">GICC Meeting Room Presentation</span></li>
+                                    <li>14:30 <span class="tm-highlight">갤럭시호텔 컨벤션센터 Presentation</span></li>
                                     <li>★ <span class="tm-highlight">하우스 오브 댄싱 워터 쇼</span> 관람 ★</li>
                                     <li>호텔 투숙 및 휴식</li>
                                 </ul>
@@ -1546,9 +1584,29 @@
             }
             window.print();
         }
+        function showScheduleDay(dayKey) {
+            const days = ['day1', 'day2', 'day3', 'day4'];
+            if (!days.includes(dayKey)) dayKey = 'day1';
+            days.forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', id !== dayKey);
+            });
+            document.querySelectorAll('.schedule-tab-btn').forEach((btn) => {
+                const active = btn.getAttribute('data-day') === dayKey;
+                btn.classList.toggle('active', active);
+                btn.classList.toggle('bg-blue-600', active);
+                btn.classList.toggle('text-white', active);
+                btn.classList.toggle('border-blue-600', active);
+                btn.classList.toggle('shadow-sm', active);
+                btn.classList.toggle('bg-white', !active);
+                btn.classList.toggle('text-slate-600', !active);
+                btn.classList.toggle('border-slate-300', !active);
+            });
+        }
         function goToTodaySchedule() {
-            const dayKey = getTodayDayKey();
-            if (dayKey) document.getElementById(dayKey)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const dayKey = getTodayDayKey() || 'day1';
+            showScheduleDay(dayKey);
+            document.getElementById('schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
         function goToTodayRoute() {
             const dayKey = getTodayDayKey();
@@ -1560,6 +1618,7 @@
             const dayKey = getTodayDayKey();
             if (bar) bar.classList.toggle('hidden', !dayKey);
             document.body.classList.toggle('event-day', !!dayKey);
+            showScheduleDay(dayKey || 'day1');
         }
 
         // 2. Weather API (Macau coords: 22.1987, 113.5439) + live Macau clock
@@ -1833,7 +1892,7 @@
             londoner: { c: [22.1466, 113.5610], t: "런더너 마카오", col: '#4f46e5', i: "🛡️" },
             parisian: { c: [22.1432, 113.5640], t: "파리지엥 (에펠타워)", col: '#7c3aed', i: "🗼" },
             galaxy: { c: [22.1480, 113.5560], t: "갤럭시 마카오", col: '#2563eb', i: "🌌" },
-            gicc: { c: [22.1495, 113.5552], t: "GICC (회의·프레젠테이션)", col: '#1d4ed8', i: "🏛️" },
+            gicc: { c: [22.1495, 113.5552], t: "갤럭시호텔 컨벤션센터(GICC)", col: '#1d4ed8', i: "🏛️" },
             andaz: { c: [22.1491, 113.5556], t: "안다즈 게스트룸", col: '#059669', i: "🏨" },
             jw: { c: [22.1484, 113.5549], t: "JW 메리어트 · Urban Kitchen", col: '#d97706', i: "🍽️" },
             ritz: { c: [22.1476, 113.5554], t: "리츠칼튼 마카오", col: '#7c3aed', i: "👑" },
@@ -1848,7 +1907,7 @@
             all: '📍 전체 동선: 에어마카오 NX821·NX826 + 코타이 숙소',
             day1: '📍 1일차: 마카오 도착 후 베네시안 리조트 답사 동선',
             day2: '📍 2일차: 역사지구(반도) → 코타이 통합리조트 답사',
-            day3: '📍 3일차: 도보권 — GICC·안다즈·JW·리츠·Deck 투어 → 런치 → Presentation → 워터쇼',
+            day3: '📍 3일차: 도보권 — 컨벤션센터·안다즈·JW·리츠·Deck 투어 → 런치 → Presentation → 워터쇼',
             day4: '📍 4일차: 마카오 반도 답사 후 공항 이동 · 귀국'
         };
         const routes = {
@@ -2284,8 +2343,8 @@
 
         function changeMapAndTab(dayId) {
             changeMap(dayId === 'all' ? 'all' : dayId);
-            const target = dayId === 'all' ? document.getElementById('schedule') : document.getElementById(dayId);
-            target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (dayId !== 'all') showScheduleDay(dayId);
+            document.getElementById('schedule')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         let resizeTimer;
