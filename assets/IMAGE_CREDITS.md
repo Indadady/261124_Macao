@@ -17,3 +17,5 @@
 | dining-buffet-spread.jpg | [Commons: Urban Kitchen lunch buffet seafood (Nov 2024)](https://commons.wikimedia.org/wiki/File:MC_%E6%BE%B3%E9%96%80_Macau_%E8%B7%AF%E6%B0%B5_Cotai_%E8%90%AC%E8%B1%AA%E9%85%92%E5%BA%97_JW_Marriott_Hotel_Macao_%E5%90%8D%E5%BB%9A%E9%83%BD%E5%8C%AF_Urban_Kitchen_Restaurant_%E8%87%AA%E5%8A%A9%E5%8D%88%E9%A4%90_lunch_buffet_%E6%B5%B7%E9%AE%AE_seafood_November_2024_R12S_04.jpg) | CC BY-SA |
 | kangwonland-logo.png | [강원랜드 공식](https://www.high1.com/) (gnb/logo.png) | © 강원랜드 |
 | guidebook-qr.png | Generated for https://indadady.github.io/261124_Macao/ | — |
+| meet-gicc-exterior.jpg | [Commons: Galaxy ICC.jpg](https://commons.wikimedia.org/wiki/File:Galaxy_ICC.jpg) | CC BY-SA 4.0 |
+| meet-andaz-gicc-exterior.jpg | Commons Andaz/Arena exterior Nov 2023 | CC0 |
