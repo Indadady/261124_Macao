@@ -2014,15 +2014,33 @@
         }
         const PLANE_REST_DEG = 45;
         const BUS_REST_DEG = 90;
+        // 항공: 스케줄 시각 차 + 시차(KST=CST+1) 반영한 실제 운항시간
+        // NX821 ICN 14:05 → MFM 17:05 = 시계 3시간 + 시차 1시간 = 운항 약 4시간
+        // NX826 MFM 18:10 → ICN 22:45 = 시계 4시간 35분 − 시차 1시간 = 운항 약 3시간 35분
         const LEG_INFO = {
-            'icn>mfm': { time: '약 4시간\n14:05 → 17:05' },
-            'mfm>icn': { time: '약 3시간 35분\n18:10 → 22:45' }
+            'icn>mfm': { time: '운항 약 4시간\nNX821 14:05 → 17:05' },
+            'mfm>icn': { time: '운항 약 3시간 35분\nNX826 18:10 → 22:45' }
+        };
+        // 단체 이동 보수 계수 (승하차·집결·보행 속도·교통 여유)
+        const GROUP_TIME = {
+            road: 1.9,
+            walk: 1.8,
+            boardMin: 10,
+            walkMinFloor: 5,
+            roadMinFloor: 15
         };
         function formatKm(meters) {
             if (!meters || meters < 80) return '';
             if (meters < 1000) return '약 ' + (Math.round(meters / 10) * 10) + 'm';
             const km = meters / 1000;
             return '약 ' + (km >= 10 ? Math.round(km) : km.toFixed(1)) + 'km';
+        }
+        function adjustGroupSeconds(seconds, mode) {
+            if (!seconds || mode === 'air') return seconds;
+            if (mode === 'walk') {
+                return Math.max(GROUP_TIME.walkMinFloor * 60, seconds * GROUP_TIME.walk);
+            }
+            return Math.max(GROUP_TIME.roadMinFloor * 60, seconds * GROUP_TIME.road + GROUP_TIME.boardMin * 60);
         }
         function formatMoveTime(seconds) {
             if (!seconds || seconds < 30) return '';
@@ -2042,7 +2060,12 @@
             const km = formatKm(meters);
             box.classList.remove('hidden');
             legEl.textContent = spots[leg.from].t + ' → ' + spots[leg.to].t;
-            timeEl.textContent = info.time || formatMoveTime(seconds);
+            if (info.time) {
+                timeEl.textContent = info.time;
+            } else {
+                const adj = formatMoveTime(adjustGroupSeconds(seconds, leg.mode));
+                timeEl.textContent = adj ? (adj + '\n(단체 기준)') : '';
+            }
             kmEl.textContent = leg.mode === 'air' ? (km ? '항공 직선 ' + km : '') : (leg.mode === 'walk' && km ? '도보 ' + km : km);
         }
         function headingPair(latlngs, i) {
@@ -2130,7 +2153,8 @@
                 } catch (e) { /* try next profile or fall back to straight line */ }
             }
             const meters = pathMetres(pts);
-            return { path: pts, meters, seconds: meters / (profileName === 'foot' ? 1.2 : 8) };
+            // fallback: 단체 보행 ~0.7m/s, 단체 차량 ~5m/s(도심·신호 감안)
+            return { path: pts, meters, seconds: meters / (profileName === 'foot' ? 0.7 : 5) };
         }
         function lineDuration(pixelLength, routeKey, mode) {
             const mobile = isMobileView();
@@ -2228,7 +2252,7 @@
             if (leg.mode !== 'walk') return routed;
             const straight = L.latLng(from).distanceTo(L.latLng(to));
             if (straight < 1000 && pathMetres(routed.path) > straight * 3.5) {
-                return { path: [from, to], meters: straight, seconds: straight / 1.2 };
+                return { path: [from, to], meters: straight, seconds: straight / 0.7 };
             }
             return routed;
         }
