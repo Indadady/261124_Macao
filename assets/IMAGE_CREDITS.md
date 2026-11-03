@@ -19,3 +19,5 @@
 | guidebook-qr.png | Generated for https://indadady.github.io/261124_Macao/ | — |
 | meet-gicc-exterior.jpg | [Commons: Galaxy ICC.jpg](https://commons.wikimedia.org/wiki/File:Galaxy_ICC.jpg) | CC BY-SA 4.0 |
 | meet-andaz-gicc-exterior.jpg | Commons Andaz/Arena exterior Nov 2023 | CC0 |
+| macao-arrival-card-current.png | [Macao SAR Portal — Arrival Card](https://www.gov.mo/en/news/93341/) (Public Security Police Force) | © Macao SAR Government |
+| macao-arrival-card-frontback.png | [Macao SAR Portal — Arrival Card sample](https://www.gov.mo/en/news/93341/) (Public Security Police Force) | © Macao SAR Government |
