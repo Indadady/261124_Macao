@@ -21,3 +21,4 @@
 | meet-andaz-gicc-exterior.jpg | Commons Andaz/Arena exterior Nov 2023 | CC0 |
 | macao-arrival-card-current.png | [Macao SAR Portal — Arrival Card](https://www.gov.mo/en/news/93341/) (Public Security Police Force) | © Macao SAR Government |
 | macao-arrival-card-frontback.png | [Macao SAR Portal — Arrival Card sample](https://www.gov.mo/en/news/93341/) (Public Security Police Force) | © Macao SAR Government |
+| depart-valley-skihouse.jpg | 담당자 공유 거리뷰(하이원 밸리 스키하우스 입구 버스주차장 · 정선군 고한읍) | 장소 확인용 |
