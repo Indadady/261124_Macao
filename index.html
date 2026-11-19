@@ -978,7 +978,6 @@
                                 <div class="relative"><div class="timeline-dot bg-slate-400 ring-slate-100"></div><h4 class="font-bold text-base text-slate-800">호텔 조식 후 체크아웃</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-amber-600 ring-amber-100"></div><h4 class="font-bold text-base text-slate-800">MGM 마카오 (그랜드 프라사 쇼) 및 카지노 답사</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-rose-600 ring-rose-100"></div><h4 class="font-bold text-base text-slate-800">윈 마카오 (나무 쇼) · 그랜드 리스보아(골동품) 답사</h4></div>
-                                <div class="relative"><div class="timeline-dot bg-violet-600 ring-violet-100"></div><h4 class="font-bold text-base text-slate-800">샌즈 마카오 (피셔맨즈 워프) 관광</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-blue-600 ring-blue-100"></div><h4 class="font-bold text-base text-slate-800">18:10 마카오 출발 (NX826) · 인천 22:45 도착</h4></div>
                                 <div class="relative"><div class="timeline-dot bg-emerald-600 ring-emerald-100"></div><h4 class="font-bold text-base text-slate-800">인천 도착 후 전용차량으로 강원랜드 복귀</h4><p class="text-slate-600 text-sm mt-1">인솔자 안내에 따라 차량 탑승</p></div>
                             </div>
@@ -1113,8 +1112,9 @@
                             <p class="text-lg font-bold">조혁 이사 010-4249-4026</p>
                         </div>
                         <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm border border-white/20 mb-1">
-                            <p class="text-xs text-slate-300 mb-1">현지 가이드</p>
-                            <p class="text-base font-bold">현지 가이드 · 미정 (확정 후 안내)</p>
+                            <p class="text-xs text-slate-300 mb-1">현지 가이드 (1차 확정)</p>
+                            <p class="text-base font-bold">윤수진 (여) · +853 6884-1319</p>
+                            <p class="text-[11px] text-slate-400 mt-1">2차 가이드는 확정 후 안내</p>
                         </div>
                     </div>
                 </div>
@@ -1550,7 +1550,7 @@
                                 <ul class="tm-desc-list">
                                     <li>호텔 조식 후 체크아웃</li>
                                     <li><span class="tm-highlight">MGM 마카오</span>(그랜드 프라사 쇼) · 카지노 답사</li>
-                                    <li><span class="tm-highlight">윈 마카오</span>(나무 쇼) · 그랜드 리스보아 · 샌즈</li>
+                                    <li><span class="tm-highlight">윈 마카오</span>(나무 쇼) · 그랜드 리스보아 답사</li>
                                     <li>공항 이동 / 마카오 출발 · 인천 도착 후 강원랜드 복귀</li>
                                 </ul>
                             </td>
@@ -2000,8 +2000,7 @@
             cod: { c: [22.1483, 113.5612], t: "댄싱 워터 쇼 (City of Dreams)", col: '#0891b2', i: "💧" },
             mgmmacau: { c: [22.1903, 113.5455], t: "MGM 마카오", col: '#d97706', i: "🎰" },
             wynn: { c: [22.1899, 113.5447], t: "윈 마카오 (나무쇼)", col: '#059669', i: "🌳" },
-            grandlisboa: { c: [22.1893, 113.5430], t: "그랜드 리스보아", col: '#ca8a04', i: "💎" },
-            wharf: { c: [22.1957, 113.5527], t: "피셔맨즈 워프", col: '#f59e0b', i: "⚓" }
+            grandlisboa: { c: [22.1893, 113.5430], t: "그랜드 리스보아", col: '#ca8a04', i: "💎" }
         };
         const mapHints = {
             all: '📍 전체 동선: 강원랜드 → 인천 → 마카오(NX821·NX826) → 강원랜드 복귀',
@@ -2065,15 +2064,14 @@
                 ]
             },
             day4: {
-                p: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm','icn','kangwon'],
-                zoom: ['hotel','mgmmacau','wynn','grandlisboa','wharf','mfm'],
+                p: ['hotel','mgmmacau','wynn','grandlisboa','mfm','icn','kangwon'],
+                zoom: ['hotel','mgmmacau','wynn','grandlisboa','mfm'],
                 maxZoom: 13,
                 legs: [
                     { from:'hotel', to:'mgmmacau', mode:'road', color:'#d97706' },
                     { from:'mgmmacau', to:'wynn', mode:'road', color:'#d97706' },
                     { from:'wynn', to:'grandlisboa', mode:'road', color:'#d97706' },
-                    { from:'grandlisboa', to:'wharf', mode:'road', color:'#d97706' },
-                    { from:'wharf', to:'mfm', mode:'road', color:'#d97706' },
+                    { from:'grandlisboa', to:'mfm', mode:'road', color:'#d97706' },
                     { from:'mfm', to:'icn', mode:'air', color:'#64748b', label:'NX826 귀국' },
                     { from:'icn', to:'kangwon', mode:'road', color:'#059669', label:'강원랜드 복귀' }
                 ]
