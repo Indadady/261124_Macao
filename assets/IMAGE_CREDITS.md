@@ -2,8 +2,8 @@
 
 | File | Source | License |
 |------|--------|---------|
-| hero.jpg | [Commons: Macau Cotai Strip (12469090953).jpg](https://commons.wikimedia.org/wiki/File:Macau_Cotai_Strip_(12469090953).jpg) | CC BY-SA |
-| og-thumb.jpg | [Commons: Macau skyline by night.jpg](https://commons.wikimedia.org/wiki/File:Macau_skyline_by_night.jpg) | CC BY-SA |
+| hero.jpg | 갤럭시호텔 전경_야경.pdf (담당자 공유 · Galaxy Macau night aerial) | © Galaxy Macau / 행사 자료 |
+| og-thumb.jpg | 갤럭시호텔 전경_야경.pdf (담당자 공유 · Galaxy Macau night aerial) | © Galaxy Macau / 행사 자료 |
 | day1-venetian.jpg | [Commons: The Venetian Macao.jpg](https://commons.wikimedia.org/wiki/File:The_Venetian_Macao.jpg) | CC BY-SA |
 | day2-stpaul.jpg | [Commons: StPaul from StPauls Hill.JPG](https://commons.wikimedia.org/wiki/File:StPaul_from_StPauls_Hill.JPG) | CC BY |
 | day3-galaxy.jpg | [Commons: Galaxy Macau.jpg](https://commons.wikimedia.org/wiki/File:Galaxy_Macau.jpg) | CC BY-SA |
